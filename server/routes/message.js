@@ -8,10 +8,9 @@ import {auth} from './verifyToken.js'
 //getConversation
 
 router.get('/conversation/:id' , auth , getConvertation)
-
+//send message
+router.post('/send/:idTo', auth, sendMessage)
 export default router
 
 
 
-//send message
-router.post('sendMessage/:idTo', auth, sendMessage)

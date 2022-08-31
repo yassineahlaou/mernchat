@@ -15,9 +15,10 @@ export const getConvertation = async (req, res) => {
     const otherUser = req.params.id
 
     let conversation = []
-
-    const messagessent = await Message.find({from : userId} , {to:otherUser}).sort({createdAt : -1})
-    const messagesget = await Message.find({from : otherUser} , {to:userId}).sort({createdAt : -1})
+    
+    const messagessent = await Message.find({from : userId, to:otherUser})
+   
+    const messagesget = await Message.find({from : otherUser , to:userId})
 
 
     if (messagessent != [])
@@ -36,8 +37,9 @@ export const getConvertation = async (req, res) => {
            
         }
     }
+    let conv = conversation.sort((a,b)=>b.createdAt - a.createdAt)
 
-    res.send(conversation)
+    res.send(conv)
 
 
 
@@ -51,16 +53,20 @@ export const sendMessage = async (req, res) => {
         from: req.user._id,
         content: req.body.content,
         
+        
 
     })
+    
+    
 
-    //save user
+    //save message
     try {
         const saveMessage = await message.save()
         res.send(saveMessage)
         //res.send({user: user._id})
         
     } catch (error) {
+        console.log(error)
         res.status(400).send(error)
   
     }

@@ -1,3 +1,4 @@
+
 import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema({
@@ -8,10 +9,13 @@ const messageSchema = new mongoose.Schema({
         type:String
     },
     content:{
-        type:String
+        type:String,
+        require:true
+        
     },
     status:{
         type:String
+       
     }
 
 

@@ -1,0 +1,108 @@
+.login{
+    /*  width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;*/  
+    position: fixed;
+    background: #00000050;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 4;
+      .wrapper{
+                 /* width: 600px;
+                  height: 600px;
+                  background-color:black;
+                  
+                  padding: 20px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 20px;
+                  position: relative;*/ 
+                  display: flex;
+                  flex-direction: column; 
+                  position: relative;
+                  width: 40%;
+                  //gap: 20px;
+                  margin: 0 auto;
+                  height: auto;
+                  max-height: 70vh;
+                  margin-top: calc(100vh - 85vh - 20px);
+                  background: #fff;
+                  border-radius: 4px;
+                  padding: 20px;
+                  border: 1px solid #999;
+                  overflow: auto;
+                  gap: 20px;
+  
+                  h1{
+                      text-align: center;
+                      padding-bottom: 3mm;
+                  
+                  }
+                  input{
+                    height: 35px;
+                    margin-bottom: 8px;
+                    border-radius: 5px;
+                    border: 0.5px solid gray;
+                    padding-left: 5mm;
+
+
+                      
+                      color: black;
+                      
+                      
+                  }
+                  .err{
+                 
+                    color: white;
+                    
+                    background-color: #ff6666 ;
+                    //transition: all 1s ease;
+                    padding: 10px 10px;
+                    width: inherit;
+                    border-radius: 5px;
+                    text-align: center;
+                    align-self: center;
+                    //justify-content: center;
+                    width: fit-content;
+                   // animation: taadaa 3s forwards;
+                  
+                }
+                 
+                  button{
+                    background-color: #4ddbdb ;
+                    border: none;
+                    padding: 10px 40px;
+                    font-size: 17px;
+                    border-radius: 5px;
+                    margin-bottom: 5px;
+                    margin-top: 5px;
+                    cursor: pointer;
+                      
+                  }
+                 
+  
+                  .icon{
+                      position: absolute;
+                      top: 10px;
+                      right: 10px;
+                      cursor: pointer;
+                  }
+                
+                  
+      }
+  }
+  .hide{
+      display: none;
+  }

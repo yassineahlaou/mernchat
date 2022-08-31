@@ -64,12 +64,31 @@
                     font-weight: 300;
                 }
             }
+
+            .noMore{
+                margin-top: 0.4cm;
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                justify-content: center;
+                p{
+                    text-align: center;
+                }
+                div{
+                    border: 0.5px solid gray;
+                    width: 2cm;
+                    margin: 2mm;
+                }
+            }
+            .hideNomore{
+                display: none;
+            }
         }
         .center{
             display: flex;
-            align-items: center;
+           align-items: center;
             flex-direction: column;
-            text-align: center;
+           text-align: center;
             width: 540px;
             height: 100%;
             left: 410px;
@@ -119,6 +138,35 @@
             p{
                 font-size: 20px;
             }
+           
+            .messageSent{
+
+                position: relative;
+                width: fit-content;
+                max-width: 200px;
+                
+                background-color: blue;
+                padding: 10px 15px;
+                
+               left: 200px;
+               border-radius: 15px;
+            
+              
+            }
+            .messageRecieved{
+                width: fit-content;
+                max-width: 200px;
+                position: relative;
+                background-color: gray;
+                padding: 10px 15px;
+                right: 180px;
+                
+               
+                
+                border-radius: 15px;
+
+            }
+        
         }
             .form{
                 
@@ -154,6 +202,21 @@
                     }
                  }
             }
+            &.NotLogged{
+               justify-content: center;
+            }
+
+        }
+        .center.NotLogged{
+            button{
+                font-size: 20px;
+                padding: 15px 20px;
+                background-color: #4ddbdb ;
+                border-radius: 10px;
+                border: none;
+                cursor: pointer;
+            }
+
         }
         .rightMenu{
             top: 70px;

@@ -99,9 +99,16 @@ export const logout =  async  (req, res) => {
 }
 
 export const searchByUsername =  async  (req, res) => {
-    const query = req.query.q  
-    const users = await User.find({username:{$regex: query , $options:"i"}}).limit(40)
+  //  let searchStart = req.body.searchStart  
+    const searchStart = req.query.q 
+    //console.log(searchStart)
+    try{
+    const users = await User.find({username:{$regex: searchStart , $options:"i"}}).limit(40)
     res.send(users)
+    }catch(error){
+        console.log(error)
+
+    }
 
 }
 
