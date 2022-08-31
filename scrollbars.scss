@@ -1,0 +1,19 @@
+@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white,  50%), $hover, $border) {
+    // For Google Chrome
+    &::-webkit-scrollbar {
+      width:  $size;
+      height: $size;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: $foreground-color;
+      border-radius: $border;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: $background-color;
+      border-radius: $border;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: $hover;
+}  }

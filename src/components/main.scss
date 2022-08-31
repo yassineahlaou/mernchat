@@ -1,0 +1,217 @@
+
+
+@import "../../scrollbars.scss";
+.main{
+        height: 100vh;
+        overflow-y: hidden;
+
+    .wrapper{
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 100%;
+        overflow: hidden;
+        height: 100%;
+        
+        .leftMenu{
+            top: 70px;
+            position: fixed;
+            left: 0;
+            z-index: 2;
+            bottom: 0.4px;
+        
+            overflow-y: hidden;
+            overflow-x: hidden;
+
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            //justify-content: center;
+            padding: 18px 26px;
+            width: 350px;
+            background-color: aquamarine;
+            //height: 100vh;
+            gap: 10px;
+            &:hover{
+                overflow-y: scroll;
+             @include scrollbars(12px, #c0c0c0  , #f1f1f1,#c0c0c0  , 10px);
+        
+            }
+            .card{
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                gap: 10px;
+                border-radius: 5px;
+                background-color: white;
+                width: 100%;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 5px;
+                cursor: pointer;
+               
+
+                
+                img{
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    background-color: gray;
+
+                }
+                p{
+                    font-weight: 300;
+                }
+            }
+        }
+        .center{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            width: 540px;
+            height: 100%;
+            left: 410px;
+           //background-color: yellow;
+           position: fixed;
+            bottom: 0.4px;
+            
+
+            top: 70px;
+          
+            
+
+        .convers{
+            
+            
+            
+            //background-color: green;
+            position: fixed;
+           
+            z-index: 2;
+          //  top: 80px;
+            
+           
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+          
+           
+            width:510px;
+            height: 81vh;
+            
+            flex-flow: column-reverse;
+            gap: 10px;
+            @include scrollbars(12px, #c0c0c0  , #f1f1f1,#c0c0c0  , 10px);
+            img{
+                
+                
+                border-radius: 50%;
+                width: 70px;
+                height: 70px;
+                min-height: 70px;
+                background-color: gray;
+             
+            }
+            p{
+                font-size: 20px;
+            }
+        }
+            .form{
+                
+                display: flex;
+               
+                
+                align-items: center;
+                flex-direction: row;
+            
+                bottom: 3mm;
+                padding-left: 3mm;
+                position: fixed;
+                input{
+                    width:480px;
+                   
+                   height: 30px;
+                   border-radius: 5px;
+                   border: 0.5px solid gray;
+                 }
+                 button{
+                    background-color: transparent;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border: none;
+                  
+                    height: 30px;
+                    cursor: pointer;
+                    .ico{
+                       
+                       font-size: 30px;
+
+                    }
+                 }
+            }
+        }
+        .rightMenu{
+            top: 70px;
+            position: fixed;
+            right: 0;
+            z-index: 2;
+            bottom: 0.4px;
+        
+            overflow-y: hidden;
+            overflow-x: hidden;
+
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            //justify-content: center;
+            padding: 18px 26px;
+            width: 350px;
+            background-color: aquamarine;
+            //height: 100vh;
+            gap: 10px;
+            &:hover{
+                overflow-y: scroll;
+             @include scrollbars(12px, #c0c0c0  , #f1f1f1,#c0c0c0  , 10px);
+        
+            }
+            .card{
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                gap: 10px;
+                border-radius: 5px;
+                background-color: white;
+                width: 100%;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 5px;
+                cursor: pointer;
+               
+
+                
+                img{
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    background-color: gray;
+
+                }
+                .text{
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+                    p{
+                        font-weight: 300;
+                    }
+                }
+               
+            }
+        }
+    }
+    
+}
