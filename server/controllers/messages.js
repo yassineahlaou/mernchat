@@ -64,11 +64,14 @@ export const sendMessage = async (req, res) => {
         const saveMessage = await message.save()
         res.send(saveMessage)
         //res.send({user: user._id})
+
         
     } catch (error) {
         console.log(error)
         res.status(400).send(error)
   
     }
+
+   
 
 }

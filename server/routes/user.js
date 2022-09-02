@@ -1,5 +1,5 @@
 import express from 'express';
-import {createUser, loginUser, getUser, logout, searchByUsername, getLastMessages } from '../controllers/users.js';
+import {createUser, loginUser, getUser, logout,searchByUsername, getLastMessages } from '../controllers/users.js';
 const router = express.Router()
 
 import {auth} from './verifyToken.js'
@@ -29,7 +29,9 @@ router.get('/usersearch' , auth, searchByUsername)
 
 //search last message
 
-router.get('/lastMessages' , auth, getLastMessages)
+router.put('/lastMessages' , auth, getLastMessages)
+
+
 
 
 

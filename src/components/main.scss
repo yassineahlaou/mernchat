@@ -180,9 +180,9 @@
                 bottom: 3mm;
                 padding-left: 3mm;
                 position: fixed;
-                input{
+                textarea{
                     width:480px;
-                   
+                   resize: none;
                    height: 30px;
                    border-radius: 5px;
                    border: 0.5px solid gray;

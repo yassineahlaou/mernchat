@@ -5,16 +5,18 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import {fetchUsers, logout, clearSearch } from '../redux/userSlice.js'
 import Swal from 'sweetalert2'
-
+import {fetchLastContacts , getUser} from '../redux/messageSlice.js'
 import withReactContent from 'sweetalert2-react-content'
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios'
 
-export default function Navbar() {
+export default function Navbar({arr,setArr}) {
 
   const [searchStart, setSearchStart] = useState("")
 
   const {usersSearch} = useSelector((state) => state.user)
+
+  const {listLastContacts} = useSelector((state)=>state.message)
 
   const {loggedInUser} = useSelector((state) => state.user)
 
@@ -35,13 +37,15 @@ export default function Navbar() {
                 showConfirmButton: false,
                 timer: 1500
               })
-    
-    
+           
     }
     catch(error){
       console.log(error)
 
     }
+
+
+    window.location.reload(false);
 
   }
 

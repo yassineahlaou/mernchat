@@ -113,29 +113,65 @@ export const searchByUsername =  async  (req, res) => {
 }
 
 export const getLastMessages =  async  (req, res) => {
+    let test1 = ""
+    let test2 = ""
+    let test3 = ""
+    let test4 = ""
     const userId = req.user._id
     const loggedUser = await User.findById(userId)
     const sents = await Message.find({from:userId }).sort({createdAt : -1})
     const gets = await Message.find({to:userId }).sort({createdAt : -1})
 
-   
-
+    //console.log(gets)
+   try{
     if (sents != [])
     {
         for (var i=0 ; i< sents.length ; i++){
             if (!loggedUser.lastContacts.includes(sents[i].to)){
-                loggedUser.lastContacts.push(sents[i].to)
+
+                await User.findByIdAndUpdate( req.user._id ,{
+                    $push: {lastContacts : sents[i].to} });
+                    test1 = "addedtolahcsent"
+                }
+                
+                let userContacted = await User.findById(sents[i].to)
+
+
+                if (!userContacted.lastContacts?.includes(req.user._id)){
+                await User.findByIdAndUpdate(sents[i].to,{$push:{lastContacts : req.user._id}})
+                test2="addedtoyassinesent"
+                }
+
+               // loggedUser.lastContacts.push(sents[i].to)
             }
         }
-    }
+    
     if (gets != [])
     {
         for (var i=0 ; i< gets.length ; i++){
             if (!loggedUser.lastContacts.includes(gets[i].from)){
-                loggedUser.lastContacts.push(gets[i].from)
+               
+                await User.findByIdAndUpdate( req.user._id ,{
+                    $push: {lastContacts : gets[i].from}, });
+                    test3 = "addedtolahcget"
+               
+                //loggedUser.lastContacts.push(gets[i].from)
            }
+           let userFrom = await User.findById(gets[i].from)
+           if (!userFrom.lastContacts?.includes(req.user._id)){
+            await User.findByIdAndUpdate(gets[i].from,{$push:{lastContacts : req.user._id}})
+            test4="addedtoyassineget"
+        }
         }
     }
-
-    res.send(loggedUser)
+}catch(error){
+    console.log(error)
 }
+console.log(test1)
+console.log(test2)
+console.log(test3)
+console.log(test4)
+    res.send(loggedUser)
+   
+}
+
