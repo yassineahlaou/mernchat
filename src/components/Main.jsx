@@ -100,7 +100,7 @@ export default function Main({ actionLogin, actionRegister}) {
             try{
         await axios.post(`/message/send/${profileId}`, {content})
         
-        console.log(loggedInUser.lastContacts)
+      //  console.log(loggedInUser.lastContacts)
 
             }catch(error){
                 console.log(error.data)
@@ -118,13 +118,17 @@ export default function Main({ actionLogin, actionRegister}) {
     
    
     useEffect(()=>{
+        if (profileId != ""){
        
         getConatct()
+        }
   
    
     }, [profileId])
     useEffect(()=>{
+        if (profileId != ""){
         getConversation()
+        }
     })
 
    
@@ -135,7 +139,7 @@ export default function Main({ actionLogin, actionRegister}) {
  
         
         
-    console.log(listLastContacts)
+    //console.log(listLastContacts)
 
     
 
