@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import SendIcon from '@mui/icons-material/Send';
-import {fetchLastContacts , getUser} from '../redux/messageSlice.js'
+import {fetchLastContacts , getUser, fetchLastMessage} from '../redux/messageSlice.js'
 export default function Main({ actionLogin, actionRegister}) {
     //const Main = props => {
 
@@ -12,13 +12,20 @@ export default function Main({ actionLogin, actionRegister}) {
     const [userInfo, setUserInfo] = useState({})
     const {loggedInUser} = useSelector((state)=>state.user)
     const {usersSearch} = useSelector((state)=>state.user)
-    
+    const {lastMessages} = useSelector((state)=>state.message)
     const {listLastContacts} = useSelector((state)=>state.message)
     const [profileId, setProfileId] = useState("")
     const [messages, setMessages]=useState([])
     const [content, setMessageContent] = useState("")
     const [userLast, setUserLast] = useState({})
+    const [userLastMess, setUserLastMess] = useState({})
     const[arr,setArr] = useState([])
+    const [userRenew, setUserRenew] = useState({})
+    const [lastConv, setLastConv] = useState([])
+
+    
+
+    const [lastMessage, setLastMessage] = useState([{idContact: String, content: String}]);
  
     const dispatch = useDispatch()
    useEffect(()=>{
@@ -32,6 +39,28 @@ export default function Main({ actionLogin, actionRegister}) {
         setProfileId(e.currentTarget.getAttribute('profileid')) 
         //we used currentTarget instead of target beacuse our div is listening not trigering the event
     }
+
+    const renewLast = async ()=>{
+
+        const userLogged = await axios.get(`/user/find/${loggedInUser._id}`)
+
+        setUserRenew(userLogged.data)
+       //console.log(userLast.lastContacts)
+        userRenew.lastContacts?.map(async (lastCont)=>{
+       
+
+            const conver = await axios.get(`/message/conversation/${lastCont}`)
+             setLastConv(conver.data)
+             console.log(lastConv)
+
+    })
+    }
+
+useEffect(()=>{
+    if (loggedInUser != null){
+       renewLast()
+    }
+},[])
    
     const getLastContacts = async () =>{
        // setNewArr()
@@ -49,11 +78,17 @@ export default function Main({ actionLogin, actionRegister}) {
             //console.log(userC.data)
             
             arrayCont.push(userC.data)
-            
-            
+
+           
+           
+           
+          
+        
             
            
         })
+        
+       
         
        setArr(arrayCont)
         //console.log(arr)
@@ -65,21 +100,78 @@ export default function Main({ actionLogin, actionRegister}) {
        
     }
     //getLastContacts()
+    
+    const getMessage = async () =>{
+        
+         const userLogged = await axios.get(`/user/find/${loggedInUser._id}`)
+    
+         setUserLastMess(userLogged.data)
+        
+        
+         userLastMess.lastContacts?.map(async (lastCont)=>{
+            
+    
+             const conver = await axios.get(`/message/conversation/${lastCont}`)
+            
+          
+           let fou =  lastMessage.some((item)=>item.idContact === lastCont)
+           
+          // console.log(fou)
+           if (fou == false){
+
+                //.push( {idContact: lastCont, content: conver.data[0].content})
+               
+                setLastMessage((prev) => [
+                    ...prev,
+                    {idContact: lastCont, content: conver.data[0].content},
+                  ])
+              
+             }
+
+             console.log(lastMessage)
+
+             
+            
+           
+         
+             
+            
+         })
+        
+
+         //dispatch(fetchLastMessage(lastMessage))
+         
+        
+         //.log(lastMessage)
+        
+        
+     }
 
     useEffect(()=>{
         if(loggedInUser != null)
         {
         
         getLastContacts()
+       
         }
 },[arr])
 
+useEffect(()=>{
+ getMessage()
+},[arr])
+   
+    
 
-    /*useEffect(()=>{
-        if ( loggedInUser != null){
-           // setNewArr()
-        }
-    })*/
+    
+  
+   
+
+
+
+
+
+
+
 
 
 
@@ -142,8 +234,9 @@ export default function Main({ actionLogin, actionRegister}) {
     //console.log(listLastContacts)
 
     
-
+  let con = ""
   return (
+    
     
     <div className='main'>
         
@@ -222,14 +315,32 @@ export default function Main({ actionLogin, actionRegister}) {
 
             ( <>
            
-           {listLastContacts?.map((last)=>
+           {
+           
+           listLastContacts?.map((last)=>
            
             <div   key={last._id} className="card">
                 <img src={last.profileiImg} alt=''></img>
                 <div className="texts">
                 
                     <p className='profileName'> <strong>{last.username}</strong></p>
-                    <span className='last'> </span>
+                    
+                        {lastMessage.map((row)=>{
+                            
+                            //console.log(row)
+                            if (row.idContact == last._id){
+                              //  console.log(row.content)
+                              con = row.content
+                             // console.log(con)
+                                
+
+                            }
+                        })}
+
+        <span className='last'>{con} </span>
+
+                    
+                    
 
                 </div>
                     

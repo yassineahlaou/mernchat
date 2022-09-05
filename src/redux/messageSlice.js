@@ -7,7 +7,8 @@ export const messageSlice = createSlice({
   initialState: {
 
     currentU : {},
-    listLastContacts :[]
+    listLastContacts :[],
+    lastMessages : []
     
 
   },
@@ -23,31 +24,19 @@ export const messageSlice = createSlice({
    fetchLastContacts : (state,action)=>{
     state.loading = false; 
     
-    
-   /*  let  dataArray = action.payload  
-   
-   console.log(dataArray)
-       for (var i=0; i< dataArray.length; i++){
-      //  console.log(dataArray[i])
-      if (state.currentU.lastContacts.includes(dataArray[i]._id) == false){
-       
-        state.lastContactsListee?.push(dataArray[i])
-       
-      }
-
  
-    }*/
     state.listLastContacts = action.payload
    
 
    // console.log(state.listLastContacts)
     
   },
+  fetchLastMessage : (state,action)=>{state.loading = false;state.lastMessages = action.payload}
   },
 })
 
 
 // Action creators are generated for each case reducer function
-export const { fetchLastContacts, getUser } = messageSlice.actions
+export const { fetchLastContacts, getUser , fetchLastMessage} = messageSlice.actions
 
 export default messageSlice.reducer
