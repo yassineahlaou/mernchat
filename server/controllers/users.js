@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
 
-import { registrationValidation , loginValidation} from '../validation.js';
+import { registrationValidation , loginValidation, updateValidationProcess} from '../validation.js';
 
 import {auth} from '../routes/verifyToken.js'
 
@@ -34,7 +34,7 @@ export const createUser = async (req, res) => {
         username: req.body.username,
         email: req.body.email,
         password: hashedPassword,
-        profileimg: req.body.profileimg,
+        profileiImg: req.body.profileiImg,
 
     })
 
@@ -95,6 +95,20 @@ export const logout =  async  (req, res) => {
     res.clearCookie('authtoken')
     res.send(`GoodBye ${userLoggedIn.username} !!`)
     
+
+}
+
+export const updateUser =  async (req, res) => {
+    const {error} = updateValidationProcess(req.body)
+    if (error){return res.status(400).send(error.details[0].message)}
+    const userId = req.params.id
+    
+   
+    let foundUser = await User.findById(userId) 
+    
+    foundUser = await User.findOneAndUpdate({_id: userId}, req.body , {new: true})
+
+    res.send(`User with id ${userId}  has been updated` )
 
 }
 

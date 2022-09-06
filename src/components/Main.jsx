@@ -3,6 +3,7 @@ import './main.scss'
 import axios from 'axios'
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
+import {fetchUsers, logout, clearSearch } from '../redux/userSlice.js'
 import SendIcon from '@mui/icons-material/Send';
 import {fetchLastContacts , getUser, fetchLastMessage} from '../redux/messageSlice.js'
 export default function Main({ actionLogin, actionRegister}) {
@@ -28,11 +29,18 @@ export default function Main({ actionLogin, actionRegister}) {
     const [lastMessage, setLastMessage] = useState([{idContact: String, content: String}]);
  
     const dispatch = useDispatch()
+    useEffect(()=>{
+        if (loggedInUser == null){
+            dispatch(fetchLastContacts([]))
+        }
+    },[loggedInUser])
+    
    useEffect(()=>{
     if (loggedInUser == null){
-        dispatch(fetchLastContacts([]))
+        dispatch(fetchUsers([]))
     }
 },[loggedInUser])
+
   
   
     const getprofileId =(e)=>{
@@ -157,7 +165,10 @@ useEffect(()=>{
 },[arr])
 
 useEffect(()=>{
+    if(loggedInUser != null)
+    {
  getMessage()
+    }
 },[arr])
    
     

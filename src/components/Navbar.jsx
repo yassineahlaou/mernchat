@@ -10,7 +10,7 @@ import withReactContent from 'sweetalert2-react-content'
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios'
 
-export default function Navbar({arr,setArr}) {
+export default function Navbar({actionUpdate,openUpdate, setOpenUpdate}) {
 
   const [searchStart, setSearchStart] = useState("")
 
@@ -49,6 +49,8 @@ export default function Navbar({arr,setArr}) {
 
   }
 
+  
+
 
   const handleSearch = async (e) =>{
     e.preventDefault()
@@ -73,6 +75,8 @@ export default function Navbar({arr,setArr}) {
                 <button><SearchIcon className='ico' onClick={handleSearch}></SearchIcon></button>
             </div>
             <div className="cent">
+                 <button onClick={()=>setOpenUpdate(true)} className={!loggedInUser ? ('hide') : ('butt') } title="update profile"><img src={loggedInUser?.profileiImg}    alt=""></img></button>
+           
                     <img src='../assets/logo.png' alt=""></img>
                     <button className={!loggedInUser ? ('hide') : ('logout') } onClick={handlelogout}>Logout</button>
             </div>

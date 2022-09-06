@@ -1,5 +1,5 @@
 import express from 'express';
-import {createUser, loginUser, getUser, logout,searchByUsername, getLastMessages } from '../controllers/users.js';
+import {createUser, loginUser, getUser, updateUser,logout,searchByUsername, getLastMessages } from '../controllers/users.js';
 const router = express.Router()
 
 import {auth} from './verifyToken.js'
@@ -31,6 +31,8 @@ router.get('/usersearch' , auth, searchByUsername)
 
 router.put('/lastMessages' , auth, getLastMessages)
 
+//update one user
+router.put('/update/:id', auth ,  updateUser)
 
 
 

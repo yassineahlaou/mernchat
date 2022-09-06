@@ -25,7 +25,10 @@ export const userSlice = createSlice({
    logout: (state)=>{state.loading = false;state.error=false;state.loggedInUser = null},
    fetchUsers : (state,action)=>{state.loading = false; state.usersSearch = action.payload },
    clearSearch : (state)=>{state.loading = false ; state.usersSearch = []},
-  
+   updateProfile : (state, action) =>{
+    state.loading = false;
+    state.loggedInUser = action.payload;
+   }  
 
     
     
@@ -35,6 +38,6 @@ export const userSlice = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const { loginStart, loginSuccess, loginFailure, logout, fetchUsers, clearSearch } = userSlice.actions
+export const { loginStart, loginSuccess, loginFailure, logout, fetchUsers, clearSearch,updateProfile } = userSlice.actions
 
 export default userSlice.reducer
