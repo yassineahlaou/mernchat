@@ -1,7 +1,7 @@
 import React from 'react'
 import './main.scss'
 import axios from 'axios'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {fetchUsers, logout, clearSearch } from '../redux/userSlice.js'
 import SendIcon from '@mui/icons-material/Send';
@@ -24,7 +24,7 @@ export default function Main({ actionLogin, actionRegister}) {
     const [userRenew, setUserRenew] = useState({})
     const [lastConv, setLastConv] = useState([])
 
-    
+    const bottomRef = useRef(null);
 
     const [lastMessage, setLastMessage] = useState([{idContact: String, content: String}]);
  
@@ -48,27 +48,6 @@ export default function Main({ actionLogin, actionRegister}) {
         //we used currentTarget instead of target beacuse our div is listening not trigering the event
     }
 
-    const renewLast = async ()=>{
-
-        const userLogged = await axios.get(`/user/find/${loggedInUser._id}`)
-
-        setUserRenew(userLogged.data)
-       //console.log(userLast.lastContacts)
-        userRenew.lastContacts?.map(async (lastCont)=>{
-       
-
-            const conver = await axios.get(`/message/conversation/${lastCont}`)
-             setLastConv(conver.data)
-             console.log(lastConv)
-
-    })
-    }
-
-useEffect(()=>{
-    if (loggedInUser != null){
-       renewLast()
-    }
-},[])
    
     const getLastContacts = async () =>{
        // setNewArr()
@@ -121,7 +100,7 @@ useEffect(()=>{
     
              const conver = await axios.get(`/message/conversation/${lastCont}`)
             
-          
+          setLastConv(conver.data)
            let fou =  lastMessage.some((item)=>item.idContact === lastCont)
            
           // console.log(fou)
@@ -136,7 +115,16 @@ useEffect(()=>{
               
              }
 
-             console.log(lastMessage)
+             else{
+                const convers = await axios.get(`/message/conversation/${lastCont}`)
+                lastMessage.map((item)=>{
+                    if(item.idContact == lastCont){
+                        item.content = convers.data[0].content
+                    }
+                })
+             }
+
+             
 
              
             
@@ -151,6 +139,8 @@ useEffect(()=>{
          
         
          //.log(lastMessage)
+
+         
         
         
      }
@@ -202,20 +192,45 @@ useEffect(()=>{
         if (content != ""){
             try{
         await axios.post(`/message/send/${profileId}`, {content})
+        setMessageContent("")
+        bottomRef.current?.scrollIntoView({behavior: 'smooth'});
         
       //  console.log(loggedInUser.lastContacts)
 
             }catch(error){
                 console.log(error.data)
             }
+
+            const conver = await axios.get(`/message/conversation/${profileId}`)
+            
+            setLastConv(conver.data)
+             let foun =  lastMessage.some((item)=>item.idContact === profileId)
+             
+            // console.log(fou)
+             if (foun == true){
+  
+                  //.push( {idContact: lastCont, content: conver.data[0].content})
+                 
+                 
+
+                    lastMessage.map((line)=>{
+                        if(line.idContact == profileId){
+                            line.content = content;
+                        }
+                    })
+                
+               }
+  
        
     }
-    setMessageContent("")
+    
 }
+
 
     const getConversation = async ()=>{
         const conver = await axios.get(`/message/conversation/${profileId}`)
        setMessages(conver.data)
+      
 
     }
     
@@ -230,6 +245,7 @@ useEffect(()=>{
     }, [profileId])
     useEffect(()=>{
         if (profileId != ""){
+            
         getConversation()
         }
     })
@@ -259,7 +275,12 @@ useEffect(()=>{
             {usersSearch?.map((profile,key)=>
             
                 <div className="card" key = {profile._id} profileid={profile._id} onClick={(e)=>getprofileId(e)}>
+                    <div className="status">
                     <img src={profile.profileiImg} alt=''></img>
+                   
+                    <div className={ profile.status == 'online' ? 'online' : 'offline'}></div>
+                    </div>
+                    
                     <p className='profileName'><strong>{profile.username}</strong></p>
                 </div>
 
@@ -276,22 +297,28 @@ useEffect(()=>{
             (
                 
                 Object.keys(userInfo).length !== 0 ? ( <div className="center">
+                
                 <div className="convers">
-       
+                
+                
                     {messages.map((mess) => 
                     mess.from == loggedInUser._id ?
-                    (<div className= 'messageSent' key={mess._id}> {mess.content} </div>)
-                        :(<div className= 'messageRecieved' key={mess._id}> {mess.content} </div>)
+                    (<><div  className= 'messageSent' key={mess._id}> {mess.content} </div></>)
+                        :(<div  className= 'messageRecieved' key={mess._id}> {mess.content} </div>)
                         )}
 
-
+                    
                     <p>{userInfo.username}</p>
+                    <div className="status">
                     <img src={userInfo.profileiImg} alt=''></img>
+                    <div className={ userInfo.status == 'online' ? 'online' : 'offline'}></div>
+                    </div>
                    
      
                 </div>
+               
                 <div className="form">
-                            <textarea type="text" name="content" defaultValue={content} onChange={(e)=>setMessageContent(e.target.value)}></textarea>
+                            <textarea type="text" name="content" value={content} onChange={(e)=>setMessageContent(e.target.value)}></textarea>
                             <button type='submit' onClick={handleSend}><SendIcon className='ico'></SendIcon></button>
                 </div>
 
@@ -313,9 +340,7 @@ useEffect(()=>{
 
           <button onClick={actionLogin}>Login</button>
 
-          <h1> Create A new Account! </h1>
-
-            <button onClick={actionRegister}>Register</button>
+         
 
     </div>)
             }
@@ -331,7 +356,10 @@ useEffect(()=>{
            listLastContacts?.map((last)=>
            
             <div   key={last._id} className="card">
+                <div className="status">
                 <img src={last.profileiImg} alt=''></img>
+                <div className={ last.status == 'online' ? 'online' : 'offline'}></div>
+                </div>
                 <div className="texts">
                 
                     <p className='profileName'> <strong>{last.username}</strong></p>

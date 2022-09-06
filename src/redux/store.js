@@ -1,6 +1,6 @@
 import { configureStore , combineReducers } from '@reduxjs/toolkit'
 import userReducer from './userSlice.js'
-import messageReucer from './messageSlice.js'
+import messageReducer from './messageSlice.js'
 
 
 import {
@@ -25,7 +25,7 @@ import {
     
   }
 
-const rootReducer = combineReducers({user:userReducer, message:messageReucer})
+const rootReducer = combineReducers({user:userReducer, message:messageReducer})
 
 
 
@@ -36,10 +36,10 @@ export const store =  configureStore({
 
   middleware: (getDefaultMiddleware) =>
   getDefaultMiddleware({
-    /*serializableCheck: {
+    serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },*/
-    serializableCheck: false,
+    },
+    //serializableCheck: false,
     
     immutableCheck: false
   }),

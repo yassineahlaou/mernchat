@@ -1,5 +1,5 @@
 import express from 'express';
-import {createUser, loginUser, getUser, updateUser,logout,searchByUsername, getLastMessages } from '../controllers/users.js';
+import {createUser, loginUser, getUser, updateUser,logout,searchByUsername, updateStatusOffline,updateStatusOnline,getLastMessages } from '../controllers/users.js';
 const router = express.Router()
 
 import {auth} from './verifyToken.js'
@@ -12,6 +12,12 @@ router.post('/register', createUser )
 //login
 
 router.post('/login', loginUser )
+
+//changestatus
+router.put('/statusOnline/:id',auth, updateStatusOnline)
+
+//changestatus
+router.put('/statusOffline/:id',auth, updateStatusOffline)
 
 
 //logout

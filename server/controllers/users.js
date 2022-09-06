@@ -112,6 +112,24 @@ export const updateUser =  async (req, res) => {
 
 }
 
+export const updateStatusOnline =  async (req, res) => {
+    let foundUser = await User.findById(req.params.id)
+
+   
+
+   
+    await User.updateOne({_id: req.params.id}, {$set:{"status": "online"}} , {new: true})
+    res.send(foundUser)
+
+}
+export const updateStatusOffline =  async (req, res) => {
+    let foundUser = await User.findById(req.params.id)
+   
+     await User.updateOne({_id: req.params.id}, {$set:{"status": "offline"}} , {new: true})
+    res.send(foundUser)
+
+}
+
 export const searchByUsername =  async  (req, res) => {
   //  let searchStart = req.body.searchStart  
     const searchStart = req.query.q 

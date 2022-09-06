@@ -63,6 +63,23 @@
                       
                       
                   }
+                  .image{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 10px;
+                    
+                    label{
+                        width: 35%;
+                    }
+                  
+
+                  .file{
+                    padding: 10px;
+                    width: 65%;
+
+                  }
+                }
 
                   .checkboxStyle{
                     display: flex;

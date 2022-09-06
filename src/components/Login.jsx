@@ -26,11 +26,14 @@ const Login = props => {
     
     const [image, setImage] = useState(undefined)
     const [imgPerc, setImgPerc] = useState(0);
-    const [inputs, setInputs] = useState({});
+    
     const [errorReg, setErrorReg] = useState("")
   const [uploaded, setUploaded] = useState()
   const [register,setRegister] = useState(false)
   const [message, setMessage] = useState("")
+
+  const [inputs, setInputs] = useState({});
+  
 
 
     const [logged, setLogged] = useState(false)
@@ -39,17 +42,26 @@ const Login = props => {
 
     const {loggedInUser} = useSelector((state)=>state.user)
 
+   
+
     const handleLogin = async (e) =>{
 
         e.preventDefault()
             dispatch(loginStart())
             try{
             const res = await axios.post("/user/login", {email, password}, {withCredentials: true})
-            dispatch(loginSuccess(res.data))
 
+           
+            dispatch(loginSuccess(res.data))
+            //await axios.put(`/user/statusOnline/${loggedInUser._id}`)    
+           // const resUser = await axios.get(`/user/find/${loggedInUser._id}`)  
+            //dispatch(loginSuccess(resUser.data))
+            //console.log(loggedInUser)
+           //await axios.put(`/user/status/${loggedInUser._id}`, {...inputs})    
             
 
             setLogged(true)
+            
 
             const MySwall = withReactContent(Swal)
             MySwall.fire({
@@ -86,9 +98,22 @@ const Login = props => {
 
 
     }
+  const setStatus = async () =>{
+    await axios.put(`/user/statusOnline/${loggedInUser._id}`)    
+          const resUser = await axios.get(`/user/find/${loggedInUser._id}`)  
+            dispatch(loginSuccess(resUser.data))
+    console.log(loggedInUser)
+   
+  }
+  setStatus()
     if (logged == true){
+      
       window.location.reload(false);
+
+      
     }
+    
+
     const handleChange = (e) =>{
       setInputs((prev) => {
           return { ...prev, [e.target.name]: e.target.value };
@@ -193,11 +218,11 @@ const Login = props => {
   return (
     <div className={!logged ? ('login') : ('hide')}>
 {!register ? 
-(<div className="wrapper">
+(<div className="wrapperlogin">
  
         <CloseIcon className='icon' onClick={props.handleClose} ></CloseIcon>
 
-  <h1>Login</h1>
+  <h1>Sign In</h1>
           
           
           <input type="text" placeholder='email' name="email" value={email} onChange={(e)=>setEmail(e.target.value)} ></input>
@@ -214,17 +239,17 @@ const Login = props => {
 
           
           </div> ) :
-           (<div className="wrapper">
+           (<div className="wrapperregister">
            <CloseIcon className='icon' onClick={props.handleClose} ></CloseIcon>
    
-     <h1>Register</h1>
+     <h1>Sign Up</h1>
              
              <input type="text" placeholder='username' name="username" value = {inputs.username} onChange={handleChange}></input>
              
              <input type="text" placeholder='email' name="email" value = {inputs.email} onChange={handleChange}></input>
              
              <input type="text"  placeholder='password' name='password' value = {inputs.password} onChange={handleChange}></input>
-             <label>Image</label>
+             <label>Profile Image</label>
              { !uploaded ? (imgPerc > 0 ? (("Upload Process :" + Math.round(imgPerc,2) + "%")) : (<input type="file" className='file'  accept="image/*" onChange={(e) => setImage(e.target.files[0])}></input>) ) : (<input type="file" className='file' accept="image/*" onChange={(e) => setImage(e.target.files[0])}></input>) }
              <button type="submit" onClick={handleRegister}>Register</button>
    

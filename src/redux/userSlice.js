@@ -9,6 +9,7 @@ export const userSlice = createSlice({
     loggedInUser : null,
     loading:false,
     error:false,
+  
     usersSearch : [],
     lastContacts :[]
     
@@ -20,9 +21,14 @@ export const userSlice = createSlice({
    loginStart : (state)=>{state.loading = true},
    loginSuccess : (state,action)=>{state.loading = false ;
      state.loggedInUser = action.payload; 
+    
      },
    loginFailure : (state)=>{state.loading = false;state.error=true},
-   logout: (state)=>{state.loading = false;state.error=false;state.loggedInUser = null},
+   logout: (state)=>{state.loading = false;
+    state.error=false;
+    state.loggedInUser = null;
+   
+  },
    fetchUsers : (state,action)=>{state.loading = false; state.usersSearch = action.payload },
    clearSearch : (state)=>{state.loading = false ; state.usersSearch = []},
    updateProfile : (state, action) =>{

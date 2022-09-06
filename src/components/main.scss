@@ -52,14 +52,46 @@
                 cursor: pointer;
                
 
-                
+                .status{
+                   
+                    position: relative; 
+                    
                 img{
                     border-radius: 50%;
                     width: 40px;
                     height: 40px;
                     background-color: gray;
+                   
+                    
 
                 }
+                .online{
+                    position: absolute;
+                    top: 65%;
+                    left: 70%; 
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    
+                   
+                    background-color: green;
+                   // z-index: 2;
+                    
+                }
+                .offline{
+                    position: absolute;
+                    top: 65%;
+                    left: 70%; 
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    
+                   
+                    background-color: gray;
+                   // z-index: 2;
+                    
+                }
+            }
                 p{
                     font-weight: 300;
                 }
@@ -113,18 +145,23 @@
             
            
             overflow-y: auto;
+            
             overflow-x: hidden;
             display: flex;
             align-items: center;
             flex-direction: column;
           
            
-            width:510px;
+            width:570px;
             height: 81vh;
             
             flex-flow: column-reverse;
             gap: 10px;
             @include scrollbars(12px, #c0c0c0  , #f1f1f1,#c0c0c0  , 10px);
+                .status{
+                    position: relative;
+
+            
             img{
                 
                 
@@ -136,6 +173,38 @@
                 background-color: gray;
              
             }
+           
+            .online{
+                position: absolute;
+                top: 70%;
+                left: 80%; 
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                
+               
+                background-color: green;
+               // z-index: 2;
+                
+            }
+            .offline{
+                position: absolute;
+                top: 70%;
+                left: 80%;  
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                
+               
+                background-color: gray;
+               // z-index: 2;
+                
+            }
+        }
+        .scroll{
+            width: inherit;
+            padding: 1mm 0;
+        }
             p{
                 font-size: 20px;
             }
@@ -257,7 +326,8 @@
                 cursor: pointer;
                
 
-                
+                .status{
+                    position: relative;
                 img{
                     border-radius: 50%;
                     width: 40px;
@@ -265,6 +335,33 @@
                     background-color: gray;
 
                 }
+                .online{
+                    position: absolute;
+                    top: 65%;
+                    left: 70%; 
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    
+                   
+                    background-color: green;
+                   // z-index: 2;
+                    
+                }
+                .offline{
+                    position: absolute;
+                    top: 65%;
+                    left: 70%; 
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    
+                   
+                    background-color: gray;
+                   // z-index: 2;
+                    
+                }
+            }
                 .text{
                     display: flex;
                     align-items: center;

@@ -26,6 +26,8 @@ export default function Navbar({actionUpdate,openUpdate, setOpenUpdate}) {
     //e.preventDefault()
     
     try{
+      await axios.put(`/user/statusOffline/${loggedInUser._id}`) 
+      //console.log(loggedInUser.status)  
     const res = await axios.get("/user/logout")
     dispatch(logout())
 
@@ -48,6 +50,7 @@ export default function Navbar({actionUpdate,openUpdate, setOpenUpdate}) {
     window.location.reload(false);
 
   }
+  
 
   
 
@@ -60,7 +63,7 @@ export default function Navbar({actionUpdate,openUpdate, setOpenUpdate}) {
      
       let query = `?q=${searchStart}`
     const resSearch = await axios.get(`/user/usersearch${query}` )
-    console.log(resSearch.data)
+   
     dispatch(fetchUsers(resSearch.data))
     }
     catch(error){
