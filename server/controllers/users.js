@@ -68,10 +68,22 @@ export const loginUser = async (req, res) => {
     
 
     //create token jwt , as a security mesure that the user is logged in
-
+    
+    
     const token = jwt.sign({_id: userLog._id}, process.env.TOKEN_SECRET)
     res.cookie('authtoken', token, { httpOnly: true }).send(userLog)
+    //await User.updateOne({_id: userLog._id}, {$set:{"status": "online"}})
     
+    const messagesGet = await Message.find({ to:userLog._id})
+
+    for (var i=0; i<messagesGet.length;i++){
+        if (messagesGet[i].status == 'Sent'){
+        await Message.updateOne({_id:messagesGet[i]._id}, {$set:{"status": "Delivered"}})
+        }
+    }
+    
+
+    //await User.updateOne({_id: userLog._id}, {$set:{"status": "online"}} , {new: true})
     
 
 
@@ -91,6 +103,7 @@ export const getUser = async (req, res)=>{
 
 export const logout =  async  (req, res) => {
     const userLoggedIn = await User.findById( req.user._id )
+    await User.updateOne({_id: userLoggedIn._id}, {$set:{"status": "offline"}} , {new: true})
     
     res.clearCookie('authtoken')
     res.send(`GoodBye ${userLoggedIn.username} !!`)

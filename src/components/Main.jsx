@@ -1,10 +1,12 @@
 import React from 'react'
 import './main.scss'
 import axios from 'axios'
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef , useMemo} from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {fetchUsers, logout, clearSearch } from '../redux/userSlice.js'
 import SendIcon from '@mui/icons-material/Send';
+import OutsideClickHandler from 'react-outside-click-handler';
+import { format} from "timeago.js";
 import {fetchLastContacts , getUser, fetchLastMessage} from '../redux/messageSlice.js'
 export default function Main({ actionLogin, actionRegister}) {
     //const Main = props => {
@@ -21,13 +23,16 @@ export default function Main({ actionLogin, actionRegister}) {
     const [userLast, setUserLast] = useState({})
     const [userLastMess, setUserLastMess] = useState({})
     const[arr,setArr] = useState([])
-    const [userRenew, setUserRenew] = useState({})
-    const [lastConv, setLastConv] = useState([])
-
+    const [messageClicked, setMessageClicked] = useState(false)
+    const [messId, setMessId] = useState("")
     const bottomRef = useRef(null);
+    const [messClick , setMessClick] = useState([{idMessage:String,clicked : Boolean}]);
+    const [lastMessage, setLastMessage] = useState([{idContact: String, idFrom: String, status:String, content: String}]);
+    const  ref1 = useRef(null);
+    const [isVisisble, setIsVisisble] = useState(false)
 
-    const [lastMessage, setLastMessage] = useState([{idContact: String, content: String}]);
- 
+
+
     const dispatch = useDispatch()
     useEffect(()=>{
         if (loggedInUser == null){
@@ -41,12 +46,82 @@ export default function Main({ actionLogin, actionRegister}) {
     }
 },[loggedInUser])
 
+/*useEffect(()=>{
+    const setDelivred = async ()=>{
+    if (loggedInUser != null){
+        await axios.put(`/message/delivered/${loggedInUser._id}`)
+    }
+}
+setDelivred()
+})*/
+
   
   
-    const getprofileId =(e)=>{
+ 
+    const getprofileId = async(e)=>{
         setProfileId(e.currentTarget.getAttribute('profileid')) 
+        
+       //await axios.put(`/message/seen/${profileId}`)
         //we used currentTarget instead of target beacuse our div is listening not trigering the event
     }
+
+   
+    //console.log(ref1)
+
+    const callBackFunction = (entries) =>{
+        const [entry] = entries
+        setIsVisisble(entry.isIntersecting)
+
+    }
+
+    
+   
+    
+  //console.log(isVisisble);
+
+
+  
+    
+    
+
+  useEffect(() => {
+    const observe = new IntersectionObserver(callBackFunction)
+    if (ref1.current != null){
+        observe.observe(ref1.current)
+       // console.log('ref is changed')
+    }
+    return ()=>{
+        if (ref1.current != null){
+            observe.unobserve(ref1.current)
+        }
+    }
+  },[ref1.current])
+
+
+  const setSeen = async () =>{
+    
+       await axios.put(`/message/seen/${profileId}`)
+       //console.log('hello')
+       
+  }
+  if (isVisisble == true){
+
+  setSeen()
+  }
+
+  const setDelivred = async ()=>{
+    
+        await axios.put(`/message/delivered/${loggedInUser._id}`)
+    
+}
+
+console.log(loggedInUser?.status)
+
+if (loggedInUser?.status == 'online'){
+   // setDelivred()
+   // console.log('hello')
+}
+
 
    
     const getLastContacts = async () =>{
@@ -100,18 +175,30 @@ export default function Main({ actionLogin, actionRegister}) {
     
              const conver = await axios.get(`/message/conversation/${lastCont}`)
             
-          setLastConv(conver.data)
+         
            let fou =  lastMessage.some((item)=>item.idContact === lastCont)
            
           // console.log(fou)
            if (fou == false){
 
                 //.push( {idContact: lastCont, content: conver.data[0].content})
-               
+               if (conver.data[0].from == loggedInUser._id){
                 setLastMessage((prev) => [
                     ...prev,
-                    {idContact: lastCont, content: conver.data[0].content},
+                    {idContact: lastCont, idFrom:conver.data[0].from , status : conver.data[0].status ,content:`You:${conver.data[0].content }` }
                   ])
+
+                }
+
+                else{
+
+                    setLastMessage((prev) => [
+                        ...prev,
+                        {idContact: lastCont, idFrom:conver.data[0].from ,status : conver.data[0].status, content:conver.data[0].content  }
+                      ])
+    
+
+                }
               
              }
 
@@ -119,7 +206,12 @@ export default function Main({ actionLogin, actionRegister}) {
                 const convers = await axios.get(`/message/conversation/${lastCont}`)
                 lastMessage.map((item)=>{
                     if(item.idContact == lastCont){
-                        item.content = convers.data[0].content
+                        item.idFrom = convers.data[0].from
+                        if (convers.data[0].from == loggedInUser._id)
+                        {item.content = `You:${convers.data[0].content}`}
+                        else{
+                            item.content =convers.data[0].content
+                        }
                     }
                 })
              }
@@ -160,22 +252,7 @@ useEffect(()=>{
  getMessage()
     }
 },[arr])
-   
-    
-
-    
   
-   
-
-
-
-
-
-
-
-
-
-
     
     const getConatct = async (e,key) =>{
         
@@ -201,9 +278,9 @@ useEffect(()=>{
                 console.log(error.data)
             }
 
-            const conver = await axios.get(`/message/conversation/${profileId}`)
+           const conver = await axios.get(`/message/conversation/${profileId}`)
             
-            setLastConv(conver.data)
+        
              let foun =  lastMessage.some((item)=>item.idContact === profileId)
              
             // console.log(fou)
@@ -220,19 +297,51 @@ useEffect(()=>{
                     })
                 
                }
+
+
+               
   
        
     }
     
 }
 
+ 
 
     const getConversation = async ()=>{
+
+        
         const conver = await axios.get(`/message/conversation/${profileId}`)
        setMessages(conver.data)
+
+
+       
+       
+       //getSeen()
+
+       
+
+    /*messages.map((item)=>{
+
+        let found =  messClick.some((reco)=>reco.idMessage === item._id)
+      if (found == false)
+       {setMessClick((prev) => [
+        ...prev,
+        {idMessage: item._id,  clicked:false }
+      ])}
+
+       
+    }
+       )
+       console.log(messClick)*/
+
       
 
     }
+   
+      
+
+    
     
    
     useEffect(()=>{
@@ -247,21 +356,40 @@ useEffect(()=>{
         if (profileId != ""){
             
         getConversation()
+      //  getSeen()
         }
     })
 
    
-    
+
      
+      /* const messageClick = async (e)=>{
+        let messageId = e.currentTarget.getAttribute('messageid')
+        setMessId(messageId)
+
+        await axios.put(`/message/messageOpen/${messageId}`)
+
+
+       }
+
+       const messageOutClick = async (e)=>{
+        //const messageId = e.currentTarget.getAttribute('messageid')
+        const resMessage = await axios.get(`/message/find/${messId}`)
+        if (resMessage.clicked == true)
+        {await axios.put(`/message/messageClose/${resMessage._id}`)}
+
+
+       }
+   */
        
-   
- 
         
         
     //console.log(listLastContacts)
 
     
   let con = ""
+  let stat = ""
+  let a = 0
   return (
     
     
@@ -269,7 +397,7 @@ useEffect(()=>{
         
 
         <div className="wrapper">
-            <div className="leftMenu">
+            <div  className="leftMenu">
                 {!loggedInUser ? (<h1>Please Login</h1>) : (
                     <>
             {usersSearch?.map((profile,key)=>
@@ -296,15 +424,15 @@ useEffect(()=>{
             {loggedInUser ? 
             (
                 
-                Object.keys(userInfo).length !== 0 ? ( <div className="center">
+                Object.keys(userInfo).length !== 0 ? ( <div  className="center">
                 
-                <div className="convers">
+                <div  ref={ref1}  className="convers">
                 
                 
                     {messages.map((mess) => 
                     mess.from == loggedInUser._id ?
-                    (<><div  className= 'messageSent' key={mess._id}> {mess.content} </div></>)
-                        :(<div  className= 'messageRecieved' key={mess._id}> {mess.content} </div>)
+                    (<><OutsideClickHandler  onOutsideClick={()=>setMessageClicked(false)}><div  className= 'messageSent' onClick={()=>setMessageClicked(true)} messageid={mess._id}> {mess.content}  </div> </OutsideClickHandler> <span className={messageClicked == true ? 'infoMessage' : 'hide'}>{mess.status} . {format(mess.createdAt)}</span></>)
+                        :(<div  className= 'messageRecieved ' > {mess.content} </div>)
                         )}
 
                     
@@ -370,13 +498,24 @@ useEffect(()=>{
                             if (row.idContact == last._id){
                               //  console.log(row.content)
                               con = row.content
+                              if (row.idFrom != loggedInUser._id)
+                              {stat = row.status}
+                              else{
+                                {stat = ""}
+                              }
                              // console.log(con)
                                 
 
                             }
+
+                           
                         })}
 
-        <span className='last'>{con} </span>
+                       
+
+                        {stat == "" ? <span>{con}</span> : (stat != "Seen" ? (<span><strong>{con}</strong> </span>): (<span>{con}</span>))}
+
+       
 
                     
                     

@@ -20,6 +20,10 @@ export const getConvertation = async (req, res) => {
    
     const messagesget = await Message.find({from : otherUser , to:userId})
 
+    for (var i=0; i<messagesget.length;i++){
+       // await Message.updateOne({_id:messagesget[i]._id}, {$set:{"status": "Seen"}})
+    }
+
 
     if (messagessent != [])
     {
@@ -34,6 +38,7 @@ export const getConvertation = async (req, res) => {
         for (var i=0 ; i< messagesget.length ; i++){
            
                 conversation.push(messagesget[i])
+               // await Message.updateOne({_id:messagesget[i]._id}, {$set:{"status": "Delivred"}})
            
         }
     }
@@ -62,7 +67,18 @@ export const sendMessage = async (req, res) => {
     //save message
     try {
         const saveMessage = await message.save()
+        
+        const userTo = await User.findById(req.params.idTo)
+        if (userTo.status == "online"){
+            await Message.updateOne({_id:saveMessage._id}, {$set:{"status": "Delivered"}})
+
+        }
+        else{
+            await Message.updateOne({_id:saveMessage._id}, {$set:{"status": "Sent"}})
+        }
+
         res.send(saveMessage)
+        
         //res.send({user: user._id})
 
         
@@ -74,4 +90,53 @@ export const sendMessage = async (req, res) => {
 
    
 
+   
+
 }
+
+export const openMessage = async (req, res) => {
+
+    await Message.updateOne({_id: req.params.id}, {$set:{"clicked": true}} , {new: true})
+
+
+}
+
+
+export const closeMessage = async (req, res) => {
+    await Message.updateOne({_id: req.params.id}, {$set:{"clicked": false}} , {new: true})
+
+
+}
+
+export const getOneMessage = async (req, res) => {
+
+    const resMessage = await Message.findById(req.params.id)
+    res.send(resMessage)
+}
+
+
+export const setAsDelivered = async (req, res) => {
+    
+    const messagesGet = await Message.find({to:req.params.idL})
+
+    for (var i=0; i<messagesGet.length;i++){
+        if (messagesGet[i].status == 'Sent'){
+        await Message.updateOne({_id:messagesGet[i]._id}, {$set:{"status": "Delivered"}})
+        }
+    }
+}
+
+export const setAsSeen = async (req, res) => {
+    const idUser= req.params.idC
+    const messagesGet = await Message.find({from:idUser, to:req.user._id})
+
+    for (var i=0; i<messagesGet.length;i++){
+        await Message.updateOne({_id:messagesGet[i]._id}, {$set:{"status": "Seen"}})
+    }
+
+    res.send(messagesGet)
+}
+
+
+
+

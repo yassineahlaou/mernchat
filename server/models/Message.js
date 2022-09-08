@@ -14,9 +14,16 @@ const messageSchema = new mongoose.Schema({
         
     },
     status:{
-        type:String
+        type:String,
+        default: "Sent"
+       
+    },
+    clicked:{
+        type:Boolean,
+        default: false
        
     }
+
 
 
 

@@ -37,6 +37,7 @@ const Login = props => {
 
 
     const [logged, setLogged] = useState(false)
+    const [loggedOnline, setLoggedOnline] = useState(false)
     const {listLastContacts} = useSelector((state)=>state.message)
     
 
@@ -50,8 +51,8 @@ const Login = props => {
             dispatch(loginStart())
             try{
             const res = await axios.post("/user/login", {email, password}, {withCredentials: true})
-
-           
+            console.log(res.data)
+            setLogged(true)
             dispatch(loginSuccess(res.data))
             //await axios.put(`/user/statusOnline/${loggedInUser._id}`)    
            // const resUser = await axios.get(`/user/find/${loggedInUser._id}`)  
@@ -60,7 +61,7 @@ const Login = props => {
            //await axios.put(`/user/status/${loggedInUser._id}`, {...inputs})    
             
 
-            setLogged(true)
+           
             
 
             const MySwall = withReactContent(Swal)
@@ -88,30 +89,45 @@ const Login = props => {
 
             }
 
+           
+
           
            
             
-            
+           
             
 
             
 
 
     }
-  const setStatus = async () =>{
+ const setStatus = async () =>{
+  
     await axios.put(`/user/statusOnline/${loggedInUser._id}`)    
           const resUser = await axios.get(`/user/find/${loggedInUser._id}`)  
             dispatch(loginSuccess(resUser.data))
-    console.log(loggedInUser)
+            window.location.reload(false);
+            //setLoggedOnline(true)
+            
+           
+    //console.log(loggedInUser)
+
    
   }
+  if (loggedInUser != null){
   setStatus()
+  
+  }
     if (logged == true){
+
+     
       
-      window.location.reload(false);
+     
 
       
     }
+
+    //console.log(loggedInUser?.status)
     
 
     const handleChange = (e) =>{
