@@ -1,12 +1,6 @@
 import User from '../models/User.js';
 import Message from '../models/Message.js';
-import bcrypt from 'bcryptjs'
 
-import jwt from 'jsonwebtoken'
-
-import { registrationValidation , loginValidation} from '../validation.js';
-
-import {auth} from '../routes/verifyToken.js'
 
 
 export const getConvertation = async (req, res) => {
@@ -20,9 +14,7 @@ export const getConvertation = async (req, res) => {
    
     const messagesget = await Message.find({from : otherUser , to:userId})
 
-    for (var i=0; i<messagesget.length;i++){
-       // await Message.updateOne({_id:messagesget[i]._id}, {$set:{"status": "Seen"}})
-    }
+    
 
 
     if (messagessent != [])
@@ -53,10 +45,24 @@ export const getConvertation = async (req, res) => {
 }
 
 export const sendMessage = async (req, res) => {
+    let messStatus = ""
+    const userTo = await User.findById(req.params.idTo)
+    if (userTo.status == "online"){
+        messStatus = "Delivered"
+
+
+    }
+    else{
+        messStatus = "Sent"
+
+    }
+
     const message = new Message ({
         to: req.params.idTo,
         from: req.user._id,
         content: req.body.content,
+        status : messStatus,
+        
         
         
 
@@ -68,14 +74,7 @@ export const sendMessage = async (req, res) => {
     try {
         const saveMessage = await message.save()
         
-        const userTo = await User.findById(req.params.idTo)
-        if (userTo.status == "online"){
-            await Message.updateOne({_id:saveMessage._id}, {$set:{"status": "Delivered"}})
-
-        }
-        else{
-            await Message.updateOne({_id:saveMessage._id}, {$set:{"status": "Sent"}})
-        }
+       
 
         res.send(saveMessage)
         

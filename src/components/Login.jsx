@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+
 import './login.scss'
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
@@ -54,16 +54,7 @@ const Login = props => {
             console.log(res.data)
             setLogged(true)
             dispatch(loginSuccess(res.data))
-            //await axios.put(`/user/statusOnline/${loggedInUser._id}`)    
-           // const resUser = await axios.get(`/user/find/${loggedInUser._id}`)  
-            //dispatch(loginSuccess(resUser.data))
-            //console.log(loggedInUser)
-           //await axios.put(`/user/status/${loggedInUser._id}`, {...inputs})    
-            
-
            
-            
-
             const MySwall = withReactContent(Swal)
             MySwall.fire({
                 position: 'top-end',
@@ -88,29 +79,14 @@ const Login = props => {
             !error.response?.data.includes("Proxy") ? setError(error.response?.data) : setError("Check Your Connection")
 
             }
-
-           
-
-          
-           
-            
-           
-            
-
-            
-
-
-    }
+}
  const setStatus = async () =>{
   
     await axios.put(`/user/statusOnline/${loggedInUser._id}`)    
           const resUser = await axios.get(`/user/find/${loggedInUser._id}`)  
             dispatch(loginSuccess(resUser.data))
             window.location.reload(false);
-            //setLoggedOnline(true)
             
-           
-    //console.log(loggedInUser)
 
    
   }
@@ -118,16 +94,9 @@ const Login = props => {
   setStatus()
   
   }
-    if (logged == true){
+ 
 
-     
-      
-     
-
-      
-    }
-
-    //console.log(loggedInUser?.status)
+    
     
 
     const handleChange = (e) =>{
@@ -194,7 +163,7 @@ const Login = props => {
       if(inputs.profileiImg === undefined){
        
         setInputs(inputs.profileiImg = "../assets/avatar.jpeg")
-        //console.log(inputs.profileimg)
+        
         
       }
       console.log(inputs)

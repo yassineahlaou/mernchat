@@ -99,11 +99,11 @@ const Update = props => {
   const handleUpdate = async(e)=>{
     e.preventDefault()
     try{
-      //console.log(inputs)
+      
       if(inputs.profileiImg === undefined){
         if(checked){
         setInputs(inputs.profileiImg = "../assets/avatar.jpeg")
-        //console.log(inputs.profileimg)
+        
         }
       }
     await axios.put(`/user/update/${loggedInUser._id}`, {...inputs})
@@ -112,7 +112,7 @@ const Update = props => {
     console.log(inputs.profileimg)
      
       setUpdated(true)
-     // setErrorUp("")
+     
 
       const MySwall = withReactContent(Swal)
             MySwall.fire({

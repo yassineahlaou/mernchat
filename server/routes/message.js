@@ -24,7 +24,7 @@ router.put('/messageOpen/:id', auth, openMessage )
 router.put('/messageClose/:id', auth, closeMessage)
 
 //update satate delivered
-router.put('/delivered/:idL', auth, setAsDelivered)
+//router.put('/delivered/:idL', auth, setAsDelivered) => I integrated this feature in userLogin function
 
 //update satate seen
 router.put('/seen/:idC', auth, setAsSeen)

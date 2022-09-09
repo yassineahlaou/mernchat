@@ -9,7 +9,7 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import { format} from "timeago.js";
 import {fetchLastContacts , getUser, fetchLastMessage} from '../redux/messageSlice.js'
 export default function Main({ actionLogin, actionRegister}) {
-    //const Main = props => {
+    
 
     
     const [userInfo, setUserInfo] = useState({})
@@ -25,7 +25,7 @@ export default function Main({ actionLogin, actionRegister}) {
     const[arr,setArr] = useState([])
     const [messageClicked, setMessageClicked] = useState(false)
     const [messId, setMessId] = useState("")
-    const bottomRef = useRef(null);
+    
     const [messClick , setMessClick] = useState([{idMessage:String,clicked : Boolean}]);
     const [lastMessage, setLastMessage] = useState([{idContact: String, idFrom: String, status:String, content: String}]);
     const  ref1 = useRef(null);
@@ -46,14 +46,7 @@ export default function Main({ actionLogin, actionRegister}) {
     }
 },[loggedInUser])
 
-/*useEffect(()=>{
-    const setDelivred = async ()=>{
-    if (loggedInUser != null){
-        await axios.put(`/message/delivered/${loggedInUser._id}`)
-    }
-}
-setDelivred()
-})*/
+
 
   
   
@@ -61,12 +54,11 @@ setDelivred()
     const getprofileId = async(e)=>{
         setProfileId(e.currentTarget.getAttribute('profileid')) 
         
-       //await axios.put(`/message/seen/${profileId}`)
-        //we used currentTarget instead of target beacuse our div is listening not trigering the event
+      
     }
 
    
-    //console.log(ref1)
+    
 
     const callBackFunction = (entries) =>{
         const [entry] = entries
@@ -77,7 +69,7 @@ setDelivred()
     
    
     
-  //console.log(isVisisble);
+  
 
 
   
@@ -88,7 +80,7 @@ setDelivred()
     const observe = new IntersectionObserver(callBackFunction)
     if (ref1.current != null){
         observe.observe(ref1.current)
-       // console.log('ref is changed')
+       
     }
     return ()=>{
         if (ref1.current != null){
@@ -109,23 +101,14 @@ setDelivred()
   setSeen()
   }
 
-  const setDelivred = async ()=>{
-    
-        await axios.put(`/message/delivered/${loggedInUser._id}`)
-    
-}
+  
 
-console.log(loggedInUser?.status)
 
-if (loggedInUser?.status == 'online'){
-   // setDelivred()
-   // console.log('hello')
-}
 
 
    
     const getLastContacts = async () =>{
-       // setNewArr()
+       
         let arrayCont = []
         
         
@@ -134,10 +117,10 @@ if (loggedInUser?.status == 'online'){
         const userLogged = await axios.get(`/user/find/${loggedInUser._id}`)
 
         setUserLast(userLogged.data)
-       //console.log(userLast.lastContacts)
+      
         userLast.lastContacts?.map(async (lastCont)=>{
             let userC = await axios.get(`/user/find/${lastCont}`)
-            //console.log(userC.data)
+            
             
             arrayCont.push(userC.data)
 
@@ -153,15 +136,13 @@ if (loggedInUser?.status == 'online'){
        
         
        setArr(arrayCont)
-        //console.log(arr)
-
-        //console.log(arr)
+        
            
         dispatch(fetchLastContacts(arr))
 
        
     }
-    //getLastContacts()
+    
     
     const getMessage = async () =>{
         
@@ -178,10 +159,10 @@ if (loggedInUser?.status == 'online'){
          
            let fou =  lastMessage.some((item)=>item.idContact === lastCont)
            
-          // console.log(fou)
+          
            if (fou == false){
 
-                //.push( {idContact: lastCont, content: conver.data[0].content})
+                
                if (conver.data[0].from == loggedInUser._id){
                 setLastMessage((prev) => [
                     ...prev,
@@ -227,10 +208,7 @@ if (loggedInUser?.status == 'online'){
          })
         
 
-         //dispatch(fetchLastMessage(lastMessage))
-         
         
-         //.log(lastMessage)
 
          
         
@@ -270,9 +248,9 @@ useEffect(()=>{
             try{
         await axios.post(`/message/send/${profileId}`, {content})
         setMessageContent("")
-        bottomRef.current?.scrollIntoView({behavior: 'smooth'});
         
-      //  console.log(loggedInUser.lastContacts)
+        
+     
 
             }catch(error){
                 console.log(error.data)
@@ -283,10 +261,10 @@ useEffect(()=>{
         
              let foun =  lastMessage.some((item)=>item.idContact === profileId)
              
-            // console.log(fou)
+            
              if (foun == true){
   
-                  //.push( {idContact: lastCont, content: conver.data[0].content})
+                  
                  
                  
 
@@ -316,25 +294,6 @@ useEffect(()=>{
 
 
        
-       
-       //getSeen()
-
-       
-
-    /*messages.map((item)=>{
-
-        let found =  messClick.some((reco)=>reco.idMessage === item._id)
-      if (found == false)
-       {setMessClick((prev) => [
-        ...prev,
-        {idMessage: item._id,  clicked:false }
-      ])}
-
-       
-    }
-       )
-       console.log(messClick)*/
-
       
 
     }
@@ -356,7 +315,7 @@ useEffect(()=>{
         if (profileId != ""){
             
         getConversation()
-      //  getSeen()
+     
         }
     })
 
@@ -384,12 +343,12 @@ useEffect(()=>{
        
         
         
-    //console.log(listLastContacts)
+    
 
     
   let con = ""
   let stat = ""
-  let a = 0
+  
   return (
     
     
@@ -494,16 +453,17 @@ useEffect(()=>{
                     
                         {lastMessage.map((row)=>{
                             
-                            //console.log(row)
+                           
                             if (row.idContact == last._id){
-                              //  console.log(row.content)
+                             
                               con = row.content
                               if (row.idFrom != loggedInUser._id)
                               {stat = row.status}
                               else{
-                                {stat = ""}
+                                stat = ""
                               }
-                             // console.log(con)
+                              
+                             
                                 
 
                             }
@@ -512,7 +472,7 @@ useEffect(()=>{
                         })}
 
                        
-
+                           
                         {stat == "" ? <span>{con}</span> : (stat != "Seen" ? (<span><strong>{con}</strong> </span>): (<span>{con}</span>))}
 
        

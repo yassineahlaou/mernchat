@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 
 import { registrationValidation , loginValidation, updateValidationProcess} from '../validation.js';
 
-import {auth} from '../routes/verifyToken.js'
+
 
 //reister
 export const createUser = async (req, res) => {
@@ -72,7 +72,7 @@ export const loginUser = async (req, res) => {
     
     const token = jwt.sign({_id: userLog._id}, process.env.TOKEN_SECRET)
     res.cookie('authtoken', token, { httpOnly: true }).send(userLog)
-    //await User.updateOne({_id: userLog._id}, {$set:{"status": "online"}})
+    
     
     const messagesGet = await Message.find({ to:userLog._id})
 
@@ -83,7 +83,7 @@ export const loginUser = async (req, res) => {
     }
     
 
-    //await User.updateOne({_id: userLog._id}, {$set:{"status": "online"}} , {new: true})
+    
     
 
 
@@ -144,9 +144,9 @@ export const updateStatusOffline =  async (req, res) => {
 }
 
 export const searchByUsername =  async  (req, res) => {
-  //  let searchStart = req.body.searchStart  
+  
     const searchStart = req.query.q 
-    //console.log(searchStart)
+    
     try{
     const users = await User.find({username:{$regex: searchStart , $options:"i"}}).limit(40)
     res.send(users)
@@ -158,10 +158,10 @@ export const searchByUsername =  async  (req, res) => {
 }
 
 export const getLastMessages =  async  (req, res) => {
-    let test1 = ""
+    /* test1 = ""
     let test2 = ""
     let test3 = ""
-    let test4 = ""
+    let test4 = ""*/
     const userId = req.user._id
     const loggedUser = await User.findById(userId)
     const sents = await Message.find({from:userId }).sort({createdAt : -1})
@@ -176,7 +176,7 @@ export const getLastMessages =  async  (req, res) => {
 
                 await User.findByIdAndUpdate( req.user._id ,{
                     $push: {lastContacts : sents[i].to} });
-                    test1 = "addedtolahcsent"
+                   // test1 = "addedtolahcsent"
                 }
                 
                 let userContacted = await User.findById(sents[i].to)
@@ -184,10 +184,10 @@ export const getLastMessages =  async  (req, res) => {
 
                 if (!userContacted.lastContacts?.includes(req.user._id)){
                 await User.findByIdAndUpdate(sents[i].to,{$push:{lastContacts : req.user._id}})
-                test2="addedtoyassinesent"
+                //test2="addedtoyassinesent"
                 }
 
-               // loggedUser.lastContacts.push(sents[i].to)
+               
             }
         }
     
@@ -198,24 +198,24 @@ export const getLastMessages =  async  (req, res) => {
                
                 await User.findByIdAndUpdate( req.user._id ,{
                     $push: {lastContacts : gets[i].from}, });
-                    test3 = "addedtolahcget"
+                    //test3 = "addedtolahcget"
                
-                //loggedUser.lastContacts.push(gets[i].from)
+                
            }
            let userFrom = await User.findById(gets[i].from)
            if (!userFrom.lastContacts?.includes(req.user._id)){
             await User.findByIdAndUpdate(gets[i].from,{$push:{lastContacts : req.user._id}})
-            test4="addedtoyassineget"
+            //test4="addedtoyassineget"
         }
         }
     }
 }catch(error){
     console.log(error)
 }
-console.log(test1)
+/*console.log(test1)
 console.log(test2)
 console.log(test3)
-console.log(test4)
+console.log(test4)*/
     res.send(loggedUser)
    
 }
