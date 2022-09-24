@@ -121,7 +121,7 @@
            align-items: center;
             flex-direction: column;
            text-align: center;
-            width: 540px;
+            width: 557px;
             height: 100%;
             left: 410px;
            //background-color: yellow;
@@ -152,7 +152,7 @@
             flex-direction: column;
           
            
-            width:570px;
+            width:557px;
             height: 81vh;
             
             flex-flow: column-reverse;
@@ -208,6 +208,23 @@
             p{
                 font-size: 20px;
             }
+
+            .me{
+                
+                display:flex ;
+                //align-items: center;
+                flex-direction: column;
+                right: 210px;
+                margin-left: auto;
+                margin-right: 10px;
+                color: white;
+                
+                
+              
+
+                .infoMessage{
+                    color: black;
+                }
            
             .messageSent{
 
@@ -217,20 +234,42 @@
                 
                 background-color: blue;
                 padding: 10px 15px;
+                //margin-left: auto;
                 
-               left: 200px;
+               //left: 200px;
                border-radius: 15px;
                cursor: pointer;
             
               
-            }
+            
+        }
+    }
+            .other{
+                gap: 5px;
+
+                display:flex ;
+                align-items: center;
+                flex-wrap: wrap;
+                right: 200px;
+                margin-right: auto;
+                color: white;
+                .proImg{
+                    border-radius: 50%;
+                    width: 30px;
+                    height: 30px;
+                    background-color: gray;
+                    
+
+
+
+                }
             .messageRecieved{
                 width: fit-content;
                 max-width: 200px;
                 position: relative;
                 background-color: gray;
                 padding: 10px 15px;
-                right: 180px;
+                
                 
                cursor: pointer;
                 
@@ -238,6 +277,7 @@
                 
 
             }
+        }
         
         }
             .form{
@@ -372,6 +412,9 @@
                     p{
                         font-weight: 300;
                         
+                    }
+                    .bol{
+                        font-weight: bold;
                     }
 
                     

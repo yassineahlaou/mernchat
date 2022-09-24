@@ -1,21 +1,23 @@
 import React from 'react'
 import './main.scss'
 import axios from 'axios'
-import { useState, useEffect, useRef , useMemo} from "react";
+
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import {fetchUsers, logout, clearSearch } from '../redux/userSlice.js'
+import {fetchUsers} from '../redux/userSlice.js'
 import SendIcon from '@mui/icons-material/Send';
-import OutsideClickHandler from 'react-outside-click-handler';
+
 import { format} from "timeago.js";
-import {fetchLastContacts , getUser, fetchLastMessage} from '../redux/messageSlice.js'
-export default function Main({ actionLogin, actionRegister}) {
+import {fetchLastContacts } from '../redux/messageSlice.js'
+
+export default function Main({ actionLogin,}) {
     
 
     
     const [userInfo, setUserInfo] = useState({})
     const {loggedInUser} = useSelector((state)=>state.user)
     const {usersSearch} = useSelector((state)=>state.user)
-    const {lastMessages} = useSelector((state)=>state.message)
+ 
     const {listLastContacts} = useSelector((state)=>state.message)
     const [profileId, setProfileId] = useState("")
     const [messages, setMessages]=useState([])
@@ -23,14 +25,10 @@ export default function Main({ actionLogin, actionRegister}) {
     const [userLast, setUserLast] = useState({})
     const [userLastMess, setUserLastMess] = useState({})
     const[arr,setArr] = useState([])
-    const [messageClicked, setMessageClicked] = useState(false)
-    const [messId, setMessId] = useState("")
-    
-    const [messClick , setMessClick] = useState([{idMessage:String,clicked : Boolean}]);
     const [lastMessage, setLastMessage] = useState([{idContact: String, idFrom: String, status:String, content: String}]);
-    const  ref1 = useRef(null);
-    const [isVisisble, setIsVisisble] = useState(false)
-
+    const  ref1 = useRef(null);const [isVisisble, setIsVisisble] = useState(false)
+    const [userImage, setUserImage] = useState("")
+   
 
 
     const dispatch = useDispatch()
@@ -44,37 +42,19 @@ export default function Main({ actionLogin, actionRegister}) {
     if (loggedInUser == null){
         dispatch(fetchUsers([]))
     }
-},[loggedInUser])
+    },[loggedInUser])
 
-
-
-  
-  
- 
     const getprofileId = async(e)=>{
         setProfileId(e.currentTarget.getAttribute('profileid')) 
         
       
     }
 
-   
-    
-
     const callBackFunction = (entries) =>{
         const [entry] = entries
         setIsVisisble(entry.isIntersecting)
 
     }
-
-    
-   
-    
-  
-
-
-  
-    
-    
 
   useEffect(() => {
     const observe = new IntersectionObserver(callBackFunction)
@@ -93,7 +73,7 @@ export default function Main({ actionLogin, actionRegister}) {
   const setSeen = async () =>{
     
        await axios.put(`/message/seen/${profileId}`)
-       //console.log('hello')
+       
        
   }
   if (isVisisble == true){
@@ -124,13 +104,6 @@ export default function Main({ actionLogin, actionRegister}) {
             
             arrayCont.push(userC.data)
 
-           
-           
-           
-          
-        
-            
-           
         })
         
        
@@ -196,23 +169,9 @@ export default function Main({ actionLogin, actionRegister}) {
                     }
                 })
              }
-
-             
-
-             
-            
-           
-         
-             
-            
+  
          })
-        
-
-        
-
-         
-        
-        
+       
      }
 
     useEffect(()=>{
@@ -256,35 +215,34 @@ useEffect(()=>{
                 console.log(error.data)
             }
 
-           const conver = await axios.get(`/message/conversation/${profileId}`)
-            
+           
+            const conver = await axios.get(`/message/conversation/${profileId}`)
         
              let foun =  lastMessage.some((item)=>item.idContact === profileId)
              
             
              if (foun == true){
   
-                  
-                 
-                 
-
                     lastMessage.map((line)=>{
                         if(line.idContact == profileId){
-                            line.content = content;
+                           // line.content = content;
+                            line.idFrom = conver.data[0].from;
+                            if (conver.data[0].from == loggedInUser._id)
+                            {line.content = `You:${conver.data[0].content}`}
+
+                            else{
+                                line.content =conver.data[0].content
+                               
+                            }
                         }
+                        
                     })
                 
                }
-
-
-               
-  
-       
+ 
     }
     
 }
-
- 
 
     const getConversation = async ()=>{
 
@@ -292,16 +250,10 @@ useEffect(()=>{
         const conver = await axios.get(`/message/conversation/${profileId}`)
        setMessages(conver.data)
 
-
-       
-      
+       const userContacted = await axios.get(`/user/find/${profileId}`)
+        setUserImage(userContacted.data.profileiImg)
 
     }
-   
-      
-
-    
-    
    
     useEffect(()=>{
         if (profileId != ""){
@@ -319,33 +271,6 @@ useEffect(()=>{
         }
     })
 
-   
-
-     
-      /* const messageClick = async (e)=>{
-        let messageId = e.currentTarget.getAttribute('messageid')
-        setMessId(messageId)
-
-        await axios.put(`/message/messageOpen/${messageId}`)
-
-
-       }
-
-       const messageOutClick = async (e)=>{
-        //const messageId = e.currentTarget.getAttribute('messageid')
-        const resMessage = await axios.get(`/message/find/${messId}`)
-        if (resMessage.clicked == true)
-        {await axios.put(`/message/messageClose/${resMessage._id}`)}
-
-
-       }
-   */
-       
-        
-        
-    
-
-    
   let con = ""
   let stat = ""
   
@@ -390,8 +315,8 @@ useEffect(()=>{
                 
                     {messages.map((mess) => 
                     mess.from == loggedInUser._id ?
-                    (<><OutsideClickHandler  onOutsideClick={()=>setMessageClicked(false)}><div  className= 'messageSent' onClick={()=>setMessageClicked(true)} messageid={mess._id}> {mess.content}  </div> </OutsideClickHandler> <span className={messageClicked == true ? 'infoMessage' : 'hide'}>{mess.status} . {format(mess.createdAt)}</span></>)
-                        :(<div  className= 'messageRecieved ' > {mess.content} </div>)
+                    (<div className='me'> <div  className= 'messageSent'  messageid = {mess._id} > {mess.content}  </div> <span className='infoMessage'>{mess.status} . {format(mess.createdAt)}</span> </div>)
+                        :(<div className='other'><img className='proImg' src={userImage} alt=""></img><div  className= 'messageRecieved ' > {mess.content} </div></div>)
                         )}
 
                     
@@ -471,9 +396,9 @@ useEffect(()=>{
                            
                         })}
 
-                       
+                      
                            
-                        {stat == "" ? <span>{con}</span> : (stat != "Seen" ? (<span><strong>{con}</strong> </span>): (<span>{con}</span>))}
+                        {stat == "" ? <span >{con}</span> : (stat != "Seen" ? (<span ><strong>{con}</strong> </span>): (<span >{con}</span>))}
 
        
 

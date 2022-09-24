@@ -1,5 +1,5 @@
 import express from 'express';
-import {getConvertation, sendMessage,getOneMessage,setAsDelivered,setAsSeen, openMessage, closeMessage} from '../controllers/messages.js';
+import {getConvertation, sendMessage,getOneMessage,setAsDelivered,setAsSeen} from '../controllers/messages.js';
 const router = express.Router()
 
 import {auth} from './verifyToken.js'
@@ -17,11 +17,11 @@ router.post('/send/:idTo', auth, sendMessage)
 
 // clickemessage
 
-router.put('/messageOpen/:id', auth, openMessage )
+
 
 //closeMessage
 
-router.put('/messageClose/:id', auth, closeMessage)
+
 
 //update satate delivered
 //router.put('/delivered/:idL', auth, setAsDelivered) => I integrated this feature in userLogin function

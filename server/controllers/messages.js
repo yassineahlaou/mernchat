@@ -93,19 +93,7 @@ export const sendMessage = async (req, res) => {
 
 }
 
-export const openMessage = async (req, res) => {
 
-    await Message.updateOne({_id: req.params.id}, {$set:{"clicked": true}} , {new: true})
-
-
-}
-
-
-export const closeMessage = async (req, res) => {
-    await Message.updateOne({_id: req.params.id}, {$set:{"clicked": false}} , {new: true})
-
-
-}
 
 export const getOneMessage = async (req, res) => {
 
